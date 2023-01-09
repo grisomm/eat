@@ -36,10 +36,6 @@ class FingerDataset(torch.utils.data.Dataset):
         'two_finger']
 
     def __getitem__(self, index):
-        meta_i = self.meta.iloc[index]
-        fname = os.path.join(self.root, 'audio22_5', 'fold'+str(meta_i['fold']), meta_i['slice_file_name'])
-        label = meta_i['classID']
-
         fname = self.meta[index]
         label_name = fname.split('/')[-2]
         label = self.labels.index(label_name)
