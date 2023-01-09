@@ -13,7 +13,7 @@ class FingerDataset(torch.utils.data.Dataset):
                  root,
                  mode,
                  segment_length,
-                 sampling_rate=8000,
+                 sampling_rate,
                  transforms=None,
                  fold_id=None,
                  ):
@@ -22,9 +22,6 @@ class FingerDataset(torch.utils.data.Dataset):
         self.segment_length = segment_length
         self.transforms = transforms
         self._get_labels()
-
-        f_ = root + '/metadata/UrbanSound8K.csv'
-        meta = pd.read_csv(f_)
 
         if mode == 'train':
             self.meta = glob(f'{root}/train/*/*.wav')
