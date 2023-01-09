@@ -43,7 +43,7 @@ class FingerDataset(torch.utils.data.Dataset):
         audio.squeeze_()
         audio = 0.95 * (audio / audio.__abs__().max()).float()
 
-        print(fname, sampling_rate, audio.shape[0], self.segment_length)
+        #print(fname, sampling_rate, audio.shape[0], self.segment_length)
 
         assert("sampling rate of the file is not as configured in dataset, will cause slow fetch {}".format(sampling_rate != self.sampling_rate))
         if audio.shape[0] >= self.segment_length:
