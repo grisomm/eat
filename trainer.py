@@ -281,7 +281,7 @@ def train(args):
         args.sampling_rate = 22050
         args.n_classes = 10
     elif args.dataset == 'finger':
-        args.data_path = r'../data/water_finger_wav_500_noise_0'
+        args.data_path = r'../data/finger'
         args.sampling_rate = 22050 
         args.n_classes = 10
     else:

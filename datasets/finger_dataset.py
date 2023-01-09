@@ -24,9 +24,9 @@ class FingerDataset(torch.utils.data.Dataset):
         self._get_labels()
 
         if mode == 'train':
-            self.meta = glob(f'{root}/train/*/*.wav')
+            self.meta = glob(f'{root}/*/train/*/*.wav')
         else:
-            self.meta = glob(f'{root}/validation/*/*.wav')
+            self.meta = glob(f'{root}/*/validation/*/*.wav')
 
         self.meta = sorted(self.meta)
 
