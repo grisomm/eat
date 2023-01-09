@@ -29,10 +29,6 @@ class FingerDataset(torch.utils.data.Dataset):
             self.meta = glob(f'{root}/validation/*/*.wav')
 
         self.meta = sorted(self.meta)
-        print(mode)
-        print(len(self.meta))
-        print(self.meta[0])
-        print(self.meta[-1])
 
     def _get_labels(self):
         self.labels = [

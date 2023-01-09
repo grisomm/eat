@@ -282,7 +282,7 @@ def train(args):
         args.n_classes = 10
     elif args.dataset == 'finger':
         args.data_path = r'../data/water_finger_wav_500_noise_0'
-        args.sampling_rate = 44100 
+        args.sampling_rate = 22050 
         args.n_classes = 10
     else:
         raise ValueError("Wrong dataset in data")
