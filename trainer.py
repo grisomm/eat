@@ -185,6 +185,29 @@ def create_dataset(args):
             fold_id=args.fold_id
         )
 
+    ##################################################################################
+    # Finger 
+    ##################################################################################
+    elif args.dataset == 'finger':
+        from datasets.finger_dataset import FingerDataset as SoundDataset
+
+        train_set = SoundDataset(
+            args.data_path,
+            'train',
+            segment_length=args.seq_len,
+            sampling_rate=args.sampling_rate,
+            transforms=args.augs_signal + args.augs_noise,
+            fold_id=args.fold_id,
+        )
+
+        test_set = SoundDataset(
+            args.data_path,
+            'test',
+            segment_length=args.seq_len,
+            sampling_rate=args.sampling_rate,
+            transforms=None,
+            fold_id=args.fold_id
+        )
     return train_set, test_set
 
 
@@ -256,6 +279,10 @@ def train(args):
     elif args.dataset == 'urban8k':
         args.data_path = r'../data/UrbanSound8K'
         args.sampling_rate = 22050
+        args.n_classes = 10
+    elif args.dataset == 'finger':
+        args.data_path = r'../data/water_finger_500_noise_0'
+        args.sampling_rate = 44100 
         args.n_classes = 10
     else:
         raise ValueError("Wrong dataset in data")
