@@ -31,9 +31,10 @@ class FingerDataset(torch.utils.data.Dataset):
         self.meta = sorted(self.meta)
 
     def _get_labels(self):
-        self.labels = [
-        'one_finger',
-        'two_finger']
+        folders = glob(f'{self.root}/*/train/*')
+        folders = sorted(folders)
+        print(f'lables: {folders}')
+        self.labels = folders 
 
     def __getitem__(self, index):
         fname = self.meta[index]
