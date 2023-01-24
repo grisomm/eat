@@ -32,6 +32,7 @@ class FingerDataset(torch.utils.data.Dataset):
 
     def _get_labels(self):
         folders = glob(f'{self.root}/*/train/*')
+        folders = [ x.split('/')[-1] for x in folders ]
         folders = sorted(folders)
         print(f'lables: {folders}')
         self.labels = folders 
