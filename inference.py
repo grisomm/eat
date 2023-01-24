@@ -6,6 +6,8 @@ import yaml
 from utils.helper_funcs import accuracy, count_parameters, mAP, measure_inference_time
 import numpy as np
 import torch.nn.functional as F
+import librosa
+import torchaudio
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -17,11 +19,13 @@ def parse_args():
     return args
 
 
-def run():
-    args = parse_args()
-    f_res = args.f_res
-    add_noise = args.add_noise
-    with (args.f_res / Path("args.yml")).open() as f:
+def run(model_path):
+    f_res = Path(model_path)
+    #args = parse_args()
+    #f_res = args.f_res
+    #add_noise = args.add_noise
+    #with (args.f_res / Path("args.yml")).open() as f:
+    with (f_res / Path("args.yml")).open() as f:
         args = yaml.load(f, Loader=yaml.Loader)
     try:
         args = vars(args)
@@ -37,7 +41,8 @@ def run():
             else:
                 args[k] = v
     args['f_res'] = f_res
-    args['add_noise'] = add_noise
+    #args['add_noise'] = add_noise
+    args['add_noise'] = None 
     with open(args['f_res'] / "args.yml", "w") as f:
         yaml.dump(args, f)
     print(args)
@@ -127,15 +132,44 @@ def run():
             transforms=None
         )
 
+    elif args['dataset'] == 'finger':
+        pass
     else:
         raise ValueError
 
-    if args['dataset'] != 'audioset':
+    if args['dataset'] == 'finger':
+        return net
+    elif args['dataset'] != 'audioset':
         inference_single_label(net=net, data_set=data_set, args=args)
     elif args['dataset'] == 'audioset':
         inference_multi_label(net=net, data_set=data_set, args=args)
     else:
         raise ValueError("check args dataset")
+
+    return None
+
+def inference_from_file(net, wav_path):
+
+    with torch.no_grad():
+
+        # get x from file
+        audio, sampling_rate = torchaudio.load(wav_path)
+        audio.squeeze_()
+        #audio, sampling_rate = librosa.load(wav_path, sr=None)
+        #audio = torch.from_numpy(audio)
+        print(audio.shape)
+        audio = audio.squeeze()
+        print(audio.shape)
+        audio = 0.95 * (audio / audio.__abs__().max()).float()
+        print(audio.shape)
+        x = audio.unsqueeze(0)
+        print(x.shape)
+
+        x = x.to(device)
+        pred = net(x)
+        print(pred)
+        _, y_est = torch.max(pred, 1)
+        print(y_est)
 
 def inference_single_label(net, data_set, args):
     data_loader = DataLoader(data_set,
@@ -221,4 +255,7 @@ def inference_multi_label(net, data_set, args):
 
 
 if __name__ == '__main__':
-    pass
+    net = run('models/avocados')
+    if net:
+        inference_from_file(net, './test.wav')
+
