@@ -102,7 +102,7 @@ class SoundNetRaw(nn.Module):
             nn.BatchNorm1d(nf),
             nn.LeakyReLU(0.2, True),
         ]
-        print(f'start {nf}'}
+        print(f'start {nf}')
         self.start = nn.Sequential(*model)
         print(nf)
         model = []
