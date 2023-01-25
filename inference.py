@@ -7,7 +7,7 @@ from utils.helper_funcs import accuracy, count_parameters, mAP, measure_inferenc
 import numpy as np
 import torch.nn.functional as F
 import librosa
-import torchaudio
+#import torchaudio
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -153,17 +153,16 @@ def inference_from_file(net, wav_path):
     with torch.no_grad():
 
         # get x from file
-        audio, sampling_rate = torchaudio.load(wav_path)
+        #audio, sampling_rate = torchaudio.load(wav_path)
+        audio, sampling_rate = librosa.load(wav_path, sr=None)
+        audio = torch.from_numpy(audio)
         audio.squeeze_()
-        #audio, sampling_rate = librosa.load(wav_path, sr=None)
-        #audio = torch.from_numpy(audio)
-        print(audio.shape)
-        audio = audio.squeeze()
-        print(audio.shape)
         audio = 0.95 * (audio / audio.__abs__().max()).float()
-        print(audio.shape)
+        audio = F.pad(
+            audio, (0, 16384 - audio.size(0)), "constant"
+        ).data
+
         x = audio.unsqueeze(0)
-        print(x.shape)
 
         x = x.to(device)
         pred = net(x)
