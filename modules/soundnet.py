@@ -102,9 +102,9 @@ class SoundNetRaw(nn.Module):
             nn.BatchNorm1d(nf),
             nn.LeakyReLU(0.2, True),
         ]
-        print(f'start {nf}')
+        #print(f'start {nf}')
         self.start = nn.Sequential(*model)
-        print(nf)
+        #print(nf)
         model = []
         for i, f in enumerate(factors):
             model += [Down(channels=nf, d=f, k=f*2+1)]
@@ -139,7 +139,7 @@ class SoundNetRaw(nn.Module):
             nn.init.constant_(m.weight, 1.0)
 
     def forward(self, x):
-        print(f'forward {x.shape}')
+        #print(f'forward {x.shape}')
         x = self.start(x)
         x = self.down(x)
         x = self.down2(x)

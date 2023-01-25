@@ -678,7 +678,7 @@ def train(args):
                             y = y.to(device)
                             pred = net(x)
                             _, y_est = torch.max(pred, 1)
-                            print(x.shape, y, pred, y_est)
+                            #print(x.shape, y, pred, y_est)
                             loss += F.cross_entropy(pred, y)
                             acc += accuracy(pred.detach().data, y.detach().data, topk=[1, ])[0].item()
                             for t, p in zip(y.view(-1), y_est.view(-1)):

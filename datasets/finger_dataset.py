@@ -1,9 +1,9 @@
 import torch
-import torchaudio
+#import torchaudio
+import librosa
 import torch.nn.functional as F
 import os
 import random
-from datasets.audio_augs import AudioAugs
 import pandas as pd
 from glob import glob
 
@@ -21,16 +21,24 @@ class FingerDataset(torch.utils.data.Dataset):
         self.root = root
         self.segment_length = segment_length
         self.transforms = transforms
+        self.mode = mode
         self._get_labels()
 
         if mode == 'train':
             self.meta = glob(f'{root}/*/train/*/*.wav')
-        else:
+        elif mode == 'test':
             self.meta = glob(f'{root}/*/validation/*/*.wav')
+        else:
+            self.meta = ['./test.wav']
 
         self.meta = sorted(self.meta)
 
     def _get_labels(self):
+
+        if self.mode == 'test_file':
+            self.labels = ['test']
+            return
+
         folders = glob(f'{self.root}/*/train/*')
         folders = [ x.split('/')[-1] for x in folders ]
         folders = sorted(folders)
@@ -39,9 +47,15 @@ class FingerDataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         fname = self.meta[index]
-        label_name = fname.split('/')[-2]
+        if self.mode == 'test_file':
+            label_name = 'test' 
+        else:
+            label_name = fname.split('/')[-2]
+
         label = self.labels.index(label_name)
-        audio, sampling_rate = torchaudio.load(fname)
+        #audio, sampling_rate = torchaudio.load(fname)
+        audio, sampling_rate = librosa.load(fname, sr=None)
+        audio = torch.from_numpy(audio)
         audio.squeeze_()
         audio = 0.95 * (audio / audio.__abs__().max()).float()
 
@@ -58,6 +72,7 @@ class FingerDataset(torch.utils.data.Dataset):
             ).data
 
         if self.transforms is not None:
+            from datasets.audio_augs import AudioAugs
             audio = AudioAugs(self.transforms, sampling_rate, p=0.5)(audio)
 
         return audio.unsqueeze(0), label
