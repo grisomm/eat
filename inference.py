@@ -222,6 +222,7 @@ def inference_single_label(net, data_set, args):
 
     print("acc:{}".format(np.round(acc_av*100)/100))
     print("cm:{}".format(confusion_matrix.diag().sum() / len(data_loader.dataset)))
+    print("test num:{}".format(len(data_loader.dataset)))
     print('***************************************')
     bad_labels = []
     for i, c in enumerate(confusion_matrix):

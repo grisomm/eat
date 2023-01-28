@@ -283,7 +283,7 @@ def train(args):
     elif args.dataset == 'finger':
         args.data_path = r'../data/finger'
         args.sampling_rate = 22050 
-        args.n_classes = 4 
+        args.n_classes = 2 
     else:
         raise ValueError("Wrong dataset in data")
 
