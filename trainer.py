@@ -55,6 +55,7 @@ def parse_args():
     parser.add_argument("--data_subtype", default='balanced', type=str)
     parser.add_argument('--seq_len', default=None, type=int)
     parser.add_argument('--dataset', default=None, type=str)
+    parser.add_argument("--n_classes", default=10, type=int)
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -283,7 +284,7 @@ def train(args):
     elif args.dataset == 'finger':
         args.data_path = r'../data/finger'
         args.sampling_rate = 22050 
-        args.n_classes = 2 
+        #args.n_classes = 2 
     else:
         raise ValueError("Wrong dataset in data")
 
