@@ -19,7 +19,7 @@ def parse_args():
     return args
 
 
-def run(model_path):
+def run(model_path, from_file=True):
     f_res = Path(model_path)
     #args = parse_args()
     #f_res = args.f_res
@@ -133,19 +133,34 @@ def run(model_path):
         )
 
     elif args['dataset'] == 'finger':
-        from datasets.finger_dataset import FingerDataset as SoundDataset
-        data_set = SoundDataset(
-            args['data_path'],
-            'test_file',
-            segment_length=args['seq_len'],
-            sampling_rate=args['sampling_rate'],
-            transforms=None,
-            fold_id=args['fold_id'])
+        if from_file:
+            from datasets.finger_dataset import FingerDataset as SoundDataset
+            data_set = SoundDataset(
+                args['data_path'],
+                'test_file',
+                segment_length=args['seq_len'],
+                sampling_rate=args['sampling_rate'],
+                transforms=None,
+                fold_id=args['fold_id'])
+        else:
+            from datasets.finger_dataset import FingerDataset as SoundDataset
+            data_set = SoundDataset(
+                args['data_path'],
+                'test',
+                segment_length=args['seq_len'],
+                sampling_rate=args['sampling_rate'],
+                transforms=None,
+                fold_id=args['fold_id'])
     else:
         raise ValueError
 
     if args['dataset'] == 'finger':
-        return inference_from_file(net=net, data_set=data_set)
+        if from_file:
+            #return inference_from_file(net=net, data_set=data_set)
+            return net, data_set
+        else:
+            inference_single_label(net=net, data_set=data_set, args=args)
+
     elif args['dataset'] != 'audioset':
         inference_single_label(net=net, data_set=data_set, args=args)
     elif args['dataset'] == 'audioset':
@@ -254,4 +269,6 @@ def inference_multi_label(net, data_set, args):
 
 
 if __name__ == '__main__':
-    run('models/avocados')
+    args = parse_args()
+    f_res = args.f_res
+    run(f_res, False)

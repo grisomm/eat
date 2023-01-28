@@ -75,3 +75,5 @@ __pycache__/
 
 # nohup
 nohup.out
+
+models/

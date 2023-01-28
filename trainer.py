@@ -202,7 +202,7 @@ def create_dataset(args):
 
         test_set = SoundDataset(
             args.data_path,
-            'test',
+            'val',
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=None,
@@ -283,7 +283,7 @@ def train(args):
     elif args.dataset == 'finger':
         args.data_path = r'../data/finger'
         args.sampling_rate = 22050 
-        args.n_classes = 10
+        args.n_classes = 4 
     else:
         raise ValueError("Wrong dataset in data")
 

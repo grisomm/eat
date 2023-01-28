@@ -26,9 +26,11 @@ class FingerDataset(torch.utils.data.Dataset):
 
         if mode == 'train':
             self.meta = glob(f'{root}/*/train/*/*.wav')
-        elif mode == 'test':
+        elif mode == 'val':
             self.meta = glob(f'{root}/*/validation/*/*.wav')
-        else:
+        elif mode == 'test':
+            self.meta = glob(f'{root}/*/test/*/*.wav')
+        else:   # test_file
             self.meta = ['./test.wav']
 
         self.meta = sorted(self.meta)

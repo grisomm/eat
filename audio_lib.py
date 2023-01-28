@@ -12,8 +12,10 @@ import soundfile as sf
 import sounddevice as sd
 
 # crop config 
-low_sound = 0.018
-crop_duration = 0.5 # in second
+#low_sound = 0.018
+low_sound = 0.005
+test_low_sound = low_sound 
+crop_duration = 0.4 # in second
 
 # noise setup
 #noise_ratio = 0.3 
@@ -21,7 +23,7 @@ noise_base = 'dataset/noise'
 noise_source = None
 
 
-def record(duration = 3):
+def record(duration = 2):
 
     fs = 44100
     sd.default.samplerate = fs 
@@ -34,7 +36,7 @@ def record(duration = 3):
     start = None
 
     for i, sample in enumerate(wav):
-        if sample > low_sound:
+        if sample > test_low_sound:
             start = i
             break
 
