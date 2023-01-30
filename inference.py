@@ -15,12 +15,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--f_res", default=None, type=Path)
+    parser.add_argument('--tools', nargs='+', type=str, default=None)
     args = parser.parse_args()
     return args
 
 
-def run(model_path, from_file=True):
-    f_res = Path(model_path)
+def run(args, from_file=True):
+    f_res = Path(args.f_res)
+    tools = args.tools
     #args = parse_args()
     #f_res = args.f_res
     #add_noise = args.add_noise
@@ -41,6 +43,7 @@ def run(model_path, from_file=True):
             else:
                 args[k] = v
     args['f_res'] = f_res
+    args['tools'] = tools
     #args['add_noise'] = add_noise
     args['add_noise'] = None 
     with open(args['f_res'] / "args.yml", "w") as f:
@@ -138,6 +141,7 @@ def run(model_path, from_file=True):
             data_set = SoundDataset(
                 args['data_path'],
                 'test_file',
+                tools = args['tools'],
                 segment_length=args['seq_len'],
                 sampling_rate=args['sampling_rate'],
                 transforms=None,
@@ -147,6 +151,7 @@ def run(model_path, from_file=True):
             data_set = SoundDataset(
                 args['data_path'],
                 'test',
+                tools = args['tools'],
                 segment_length=args['seq_len'],
                 sampling_rate=args['sampling_rate'],
                 transforms=None,
@@ -159,7 +164,7 @@ def run(model_path, from_file=True):
             #return inference_from_file(net=net, data_set=data_set)
             return net, data_set
         else:
-            inference_single_label(net=net, data_set=data_set, args=args)
+            return inference_single_label(net=net, data_set=data_set, args=args)
 
     elif args['dataset'] != 'audioset':
         inference_single_label(net=net, data_set=data_set, args=args)
@@ -220,7 +225,9 @@ def inference_single_label(net, data_set, args):
     }
     torch.save(res, args['f_res'] / "res.pt")
 
-    print("acc:{}".format(np.round(acc_av*100)/100))
+    #print("acc:{}".format(np.round(acc_av*100)/100))
+    acc = np.round(acc_av*100)/100
+    print("acc:{}".format(acc))
     print("cm:{}".format(confusion_matrix.diag().sum() / len(data_loader.dataset)))
     print("test num:{}".format(len(data_loader.dataset)))
     print('***************************************')
@@ -231,6 +238,8 @@ def inference_single_label(net, data_set, args):
             print('{} {} {}-->{}'.format(i, i_est.item(), data_set.labels[i], data_set.labels[i_est]))
             bad_labels.append([i, i_est])
     print(bad_labels)
+
+    return acc.item()
 
 
 def inference_multi_label(net, data_set, args):
@@ -271,5 +280,19 @@ def inference_multi_label(net, data_set, args):
 
 if __name__ == '__main__':
     args = parse_args()
-    f_res = args.f_res
-    run(f_res, False)
+
+    if args.tools is not None: 
+
+        accs = dict()
+        accs['total'] = run(args, False)
+
+        for tool in args.tools:
+            args.tools = [ tool ] 
+            accs[tool] = run(args, False)
+
+        print('###### results #########')
+        for key, value in accs.items():
+            print(key, value)
+
+    else:
+        run(args, False)

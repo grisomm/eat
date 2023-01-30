@@ -12,6 +12,7 @@ class FingerDataset(torch.utils.data.Dataset):
     def __init__(self,
                  root,
                  mode,
+                 tools,
                  segment_length,
                  sampling_rate,
                  transforms=None,
@@ -22,8 +23,10 @@ class FingerDataset(torch.utils.data.Dataset):
         self.segment_length = segment_length
         self.transforms = transforms
         self.mode = mode
+        self.tools = tools
         self._get_labels()
 
+        print(f'tools: {tools}')
         if mode == 'train':
             self.meta = glob(f'{root}/*/train/*/*.wav')
         elif mode == 'val':
@@ -33,7 +36,14 @@ class FingerDataset(torch.utils.data.Dataset):
         else:   # test_file
             self.meta = ['./test.wav']
 
+        if tools is not None:
+            self.meta = [ x for x in self.meta if x.split('_')[-2] in tools ]
+
         self.meta = sorted(self.meta)
+
+        #for x in self.meta:
+        #    print(x)
+        #print(len(self.meta))
 
     def _get_labels(self):
 
@@ -47,7 +57,7 @@ class FingerDataset(torch.utils.data.Dataset):
         #for i in range(5-len(folders))
         #    folders.append('None')
 
-        print(folders)
+        print(f'labels: {folders}')
         self.labels = folders 
 
     def __getitem__(self, index):

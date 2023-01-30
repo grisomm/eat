@@ -14,8 +14,8 @@ def test_folder(model_path, folder):
     dataset_name = model_path.split('/')[-1]
     dataset_path = f'../../dataset/{dataset_name}'
 
-    labels = glob(f'{dataset_path}/*.wav')
-    labels = [ x.split('/')[-1].replace('.wav', '') for x in labels]
+    labels = glob(f'{dataset_path}/train/*/')
+    labels = [ x.split('/')[-2] for x in labels]
     labels = sorted(labels)
     print(labels)
 
@@ -42,8 +42,8 @@ def test_audio(model_path):
     dataset_name = model_path.split('/')[-1]
     dataset_path = f'../../dataset/{dataset_name}'
 
-    labels = glob(f'{dataset_path}/*.wav')
-    labels = [ x.split('/')[-1].replace('.wav', '') for x in labels]
+    labels = glob(f'{dataset_path}/train/*/')
+    labels = [ x.split('/')[-2] for x in labels]
     labels = sorted(labels)
     print(labels)
 
