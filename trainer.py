@@ -56,6 +56,7 @@ def parse_args():
     parser.add_argument('--seq_len', default=None, type=int)
     parser.add_argument('--dataset', default=None, type=str)
     parser.add_argument("--n_classes", default=10, type=int)
+    parser.add_argument('--tools', nargs='+', type=str, default=None)
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -195,6 +196,7 @@ def create_dataset(args):
         train_set = SoundDataset(
             args.data_path,
             'train',
+            tools=args.tools
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=args.augs_signal + args.augs_noise,
@@ -204,6 +206,7 @@ def create_dataset(args):
         test_set = SoundDataset(
             args.data_path,
             'val',
+            tools=args.tools
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=None,
