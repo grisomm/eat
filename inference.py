@@ -293,6 +293,7 @@ if __name__ == '__main__':
         print('###### results #########')
         for key, value in accs.items():
             print(key, value)
+        print(accs)
 
     else:
         run(args, False)
