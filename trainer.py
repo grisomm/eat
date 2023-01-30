@@ -196,7 +196,7 @@ def create_dataset(args):
         train_set = SoundDataset(
             args.data_path,
             'train',
-            tools=args.tools
+            tools=args.tools,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=args.augs_signal + args.augs_noise,
@@ -206,7 +206,7 @@ def create_dataset(args):
         test_set = SoundDataset(
             args.data_path,
             'val',
-            tools=args.tools
+            tools=args.tools,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=None,
