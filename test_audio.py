@@ -6,10 +6,14 @@ from glob import glob
 import shutil
 temp_out = './test.wav'
 
-def test_folder(model_path, folder):
+def test_folder(args, folder):
 
     print(f'# test from {folder}')
-    net, data_set= eat.run(model_path)
+    args.tools = None
+    args.labels = None
+    net, data_set= eat.run(args)
+
+    model_path = args.f_res
 
     dataset_name = model_path.split('/')[-1]
     dataset_path = f'../../dataset/{dataset_name}'
@@ -66,13 +70,13 @@ def test_audio(model_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('model_path', help='model path')
+    parser.add_argument('f_res', help='model path')
     parser.add_argument("--folder", help="folder", nargs='?', default=None)
     args = parser.parse_args()
 
     if args.folder is None:
-        test_audio(args.model_path)
+        test_audio(args.f_res)
     else:
-        test_folder(args.model_path, args.folder)
+        test_folder(args, args.folder)
 
 
