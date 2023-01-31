@@ -16,6 +16,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--f_res", default=None, type=Path)
     parser.add_argument('--tools', nargs='+', type=str, default=None)
+    parser.add_argument('--labels', nargs='+', type=str, default=None)
     args = parser.parse_args()
     return args
 
@@ -23,6 +24,7 @@ def parse_args():
 def run(args, from_file=True):
     f_res = Path(args.f_res)
     tools = args.tools
+    labels = args.labels
     #args = parse_args()
     #f_res = args.f_res
     #add_noise = args.add_noise
@@ -44,6 +46,7 @@ def run(args, from_file=True):
                 args[k] = v
     args['f_res'] = f_res
     args['tools'] = tools
+    args['labels'] = labels 
     #args['add_noise'] = add_noise
     args['add_noise'] = None 
     with open(args['f_res'] / "args.yml", "w") as f:
@@ -142,6 +145,7 @@ def run(args, from_file=True):
                 args['data_path'],
                 'test_file',
                 tools = args['tools'],
+                label_filters = args['labels'],
                 segment_length=args['seq_len'],
                 sampling_rate=args['sampling_rate'],
                 transforms=None,
@@ -152,6 +156,7 @@ def run(args, from_file=True):
                 args['data_path'],
                 'test',
                 tools = args['tools'],
+                label_filters = args['labels'],
                 segment_length=args['seq_len'],
                 sampling_rate=args['sampling_rate'],
                 transforms=None,
@@ -290,7 +295,21 @@ if __name__ == '__main__':
             args.tools = [ tool ] 
             accs[tool] = run(args, False)
 
-        print('###### results #########')
+        print('###### results by tool #########')
+        for key, value in accs.items():
+            print(key, value)
+        print(accs)
+
+    elif args.labels is not None:
+
+        accs = dict()
+        accs['total'] = run(args, False)
+
+        for label in args.labels:
+            args.labels = [ label ] 
+            accs[label] = run(args, False)
+
+        print('###### results by label #########')
         for key, value in accs.items():
             print(key, value)
         print(accs)

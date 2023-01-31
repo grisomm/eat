@@ -13,6 +13,7 @@ class FingerDataset(torch.utils.data.Dataset):
                  root,
                  mode,
                  tools,
+                 label_filters,
                  segment_length,
                  sampling_rate,
                  transforms=None,
@@ -24,9 +25,12 @@ class FingerDataset(torch.utils.data.Dataset):
         self.transforms = transforms
         self.mode = mode
         self.tools = tools
+        self.label_filters = label_filters
         self._get_labels()
 
-        print(f'tools: {tools}')
+        print(f'tool_filter: {tools}')
+        print(f'label_filter: {label_filters}')
+
         if mode == 'train':
             self.meta = glob(f'{root}/*/train/*/*.wav')
         elif mode == 'val':
@@ -39,11 +43,16 @@ class FingerDataset(torch.utils.data.Dataset):
         if tools is not None:
             self.meta = [ x for x in self.meta if x.split('_')[-2] in tools ]
 
+        if label_filters is not None:
+            self.meta = [ x for x in self.meta if x.split('/')[-2] in label_filters ]
+
         self.meta = sorted(self.meta)
 
-        #for x in self.meta:
-        #    print(x)
-        #print(len(self.meta))
+        '''
+        for x in self.meta:
+            print(x)
+        print(len(self.meta))
+        '''
 
     def _get_labels(self):
 
