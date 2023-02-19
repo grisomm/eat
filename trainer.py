@@ -777,10 +777,10 @@ def main():
             args.run_name = f'{args.run_name}_{i}_of_{args.k_fold}'
             args.i_fold = i
 
-            print('##################################')
+            print('#####################################################')
             print(f'# train: {i}/{args.k_fold} fold')
             print(f'# run_name: {args.run_name}') 
-            print('##################################')
+            print('#####################################################')
             train(args)
     else:
         train(args)
