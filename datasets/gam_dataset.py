@@ -76,6 +76,7 @@ class GamDataset(torch.utils.data.Dataset):
         print(f'val_set: {val_set}')
         print(f'train_set: {train_set}')
 
+        mode = 'test'
         dataset_mode = { 'train': train_set, 'val': val_set, 'test': test_set }
         self.meta = list()
         for file in dataset:
