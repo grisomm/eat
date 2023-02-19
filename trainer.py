@@ -771,8 +771,14 @@ def train(args):
 def main():
     args = parse_args()
     args = check_args(args)
-    train(args)
 
+    if args.dataset == 'gam' and args.k_fold is not None:
+        for i in range(args.k_fold):
+            args.i_fold = i
+            print(i)
+            #train(args)
+    else:
+        train(args)
 
 if __name__ == "__main__":
     main()
