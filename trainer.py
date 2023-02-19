@@ -774,13 +774,20 @@ def main():
 
     if args.dataset == 'gam' and args.k_fold is not None:
         for i in range(args.k_fold):
+
             args.run_name = f'{args.run_name}_{i}_of_{args.k_fold}'
             args.i_fold = i
 
             print('#####################################################')
             print(f'# train: {i}/{args.k_fold} fold')
             print(f'# run_name: {args.run_name}') 
+
+            if args.load_path is not None:
+                args.load_path = f'{args.load_path}_{i}_of_{args.k_fold}'
+                print(f'# load checkpoint: {args.load_path}') 
+
             print('#####################################################')
+
             train(args)
     else:
         train(args)
