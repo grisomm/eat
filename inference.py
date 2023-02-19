@@ -15,8 +15,17 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--f_res", default=None, type=Path)
+
     parser.add_argument('--tools', nargs='+', type=str, default=None)
     parser.add_argument('--labels', nargs='+', type=str, default=None)
+
+    # for gam
+    parser.add_argument('--k_fold', default=None, type=int)
+    parser.add_argument('--i_fold', default=None, type=int)
+    parser.add_argument('--t_ratio', default=None, type=float)
+    parser.add_argument('--r_seed', default=None, type=int)
+    parser.add_argument('--l_step', default=None, type=int)
+
     args = parser.parse_args()
     return args
 
@@ -25,6 +34,14 @@ def run(args, from_file=True):
     f_res = Path(args.f_res)
     tools = args.tools
     labels = args.labels
+
+    # for gam
+    k_fold = args.k_fold
+    i_fold = args.i_fold
+    t_ratio = args.t_ratio
+    r_seed = args.r_seed
+    l_step = args.l_step
+
     #args = parse_args()
     #f_res = args.f_res
     #add_noise = args.add_noise
@@ -47,6 +64,15 @@ def run(args, from_file=True):
     args['f_res'] = f_res
     args['tools'] = tools
     args['labels'] = labels 
+
+    
+    # for gam
+    args['k_fold'] = k_fold
+    args['i_fold'] = i_fold
+    args['t_ratio'] = t_ratio
+    args['r_seed'] = r_seed
+    args['l_step'] = l_step
+
     #args['add_noise'] = add_noise
     args['add_noise'] = None 
     with open(args['f_res'] / "args.yml", "w") as f:
@@ -161,6 +187,22 @@ def run(args, from_file=True):
                 sampling_rate=args['sampling_rate'],
                 transforms=None,
                 fold_id=args['fold_id'])
+    elif args['dataset'] == 'gam':
+        from datasets.gam_dataset import GamDataset as SoundDataset
+        data_set = SoundDataset(
+            args['data_path'],
+            'test',
+            #tools = args['tools'],
+            #label_filters = args['labels'],
+            k_fold = args['k_fold'],
+            i_fold = args['i_fold'],
+            r_seed = args['r_seed'],
+            t_ratio = args['t_ratio'],
+            l_step = args['l_step'],
+            segment_length=args['seq_len'],
+            sampling_rate=args['sampling_rate'],
+            transforms=None,
+            fold_id=args['fold_id'])
     else:
         raise ValueError
 
@@ -170,6 +212,9 @@ def run(args, from_file=True):
             return net, data_set
         else:
             return inference_single_label(net=net, data_set=data_set, args=args)
+
+    elif args['dataset'] == 'gam':
+        return inference_single_label(net=net, data_set=data_set, args=args)
 
     elif args['dataset'] != 'audioset':
         inference_single_label(net=net, data_set=data_set, args=args)

@@ -13,7 +13,7 @@ import sounddevice as sd
 
 # crop config 
 #low_sound = 0.018
-low_sound = 0.005
+low_sound = 0.010
 test_low_sound = low_sound 
 crop_duration = 0.4 # in second
 
@@ -23,7 +23,7 @@ noise_base = 'dataset/noise'
 noise_source = None
 
 
-def record(duration = 2):
+def record(duration = 5):
 
     fs = 44100
     sd.default.samplerate = fs 
@@ -44,7 +44,6 @@ def record(duration = 2):
         size = int(fs*crop_duration)
         if len(wav) > start + int(size/2):
             wav = wav[start:start+int(size/2)]
-            sd.wait()
             return wav, fs
 
     print('no sound')

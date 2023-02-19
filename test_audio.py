@@ -37,11 +37,14 @@ def test_folder(args, folder):
         print(f'[{i+1}/{len(files)}, {fname}] {labels[label]}')
         os.remove(temp_out)
 
-def test_audio(model_path):
-
+def test_audio(args):
 
     print('# test from mic')
-    net, data_set= eat.run(model_path)
+
+    args.tools = None
+    args.labels = None
+    net, data_set= eat.run(args)
+    model_path = args.f_res
 
     dataset_name = model_path.split('/')[-1]
     dataset_path = f'../../dataset/{dataset_name}'
@@ -58,7 +61,7 @@ def test_audio(model_path):
             al.save2wav(wav, int(sr/2), temp_out)
 
             # evaluate
-            al.play(wav, int(sr/2))
+            #al.play(wav, int(sr/2))
             print('analyze')
 
             pred = eat.inference_from_file(net, data_set)
@@ -75,7 +78,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.folder is None:
-        test_audio(args.f_res)
+        test_audio(args)
     else:
         test_folder(args, args.folder)
 

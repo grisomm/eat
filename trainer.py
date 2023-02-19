@@ -58,6 +58,11 @@ def parse_args():
     parser.add_argument("--n_classes", default=10, type=int)
     parser.add_argument('--tools', nargs='+', type=str, default=None)
     parser.add_argument('--labels', nargs='+', type=str, default=None)
+    parser.add_argument('--k_fold', default=None, type=int)
+    parser.add_argument('--i_fold', default=None, type=int)
+    parser.add_argument('--t_ratio', default=None, type=float)
+    parser.add_argument('--r_seed', default=None, type=int)
+    parser.add_argument('--l_step', default=None, type=int)
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -215,6 +220,41 @@ def create_dataset(args):
             transforms=None,
             fold_id=args.fold_id
         )
+
+    ##################################################################################
+    # Gam 
+    ##################################################################################
+    elif args.dataset == 'gam':
+        from datasets.gam_dataset import GamDataset as SoundDataset
+
+        train_set = SoundDataset(
+            args.data_path,
+            'train',
+            k_fold=args.k_fold,
+            i_fold=args.i_fold,
+            r_seed=args.r_seed,
+            t_ratio=args.t_ratio,
+            l_step=args.l_step,
+            segment_length=args.seq_len,
+            sampling_rate=args.sampling_rate,
+            transforms=args.augs_signal + args.augs_noise,
+            fold_id=args.fold_id,
+        )
+
+        test_set = SoundDataset(
+            args.data_path,
+            'val',
+            k_fold=args.k_fold,
+            i_fold=args.i_fold,
+            r_seed=args.r_seed,
+            t_ratio=args.t_ratio,
+            l_step=args.l_step,
+            segment_length=args.seq_len,
+            sampling_rate=args.sampling_rate,
+            transforms=None,
+            fold_id=args.fold_id
+        )
+
     return train_set, test_set
 
 
@@ -291,6 +331,10 @@ def train(args):
         args.data_path = r'../data/finger'
         args.sampling_rate = 22050 
         #args.n_classes = 2 
+    elif args.dataset == 'gam':
+        args.data_path = r'../data/gam'
+        args.sampling_rate = 22050 
+        args.n_classes = 15 
     else:
         raise ValueError("Wrong dataset in data")
 
