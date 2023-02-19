@@ -7,6 +7,7 @@ import random
 import pandas as pd
 from glob import glob
 from pathlib import Path
+import numpy as np
 
 
 class GamDataset(torch.utils.data.Dataset):
@@ -86,7 +87,6 @@ class GamDataset(torch.utils.data.Dataset):
             if gid in dataset_mode[mode]:
                 self.meta.append(file)
 
-
         self.meta = sorted(self.meta)
         print(f'{mode} dataset: {len(self.meta)}')
 
@@ -95,15 +95,23 @@ class GamDataset(torch.utils.data.Dataset):
         assert len(csv_path) == 1, 'one csv_path should exits'
 
 
+    def find_nearest(array, value):
+        array = np.asarray(array)
+        idx = (np.abs(array - value)).argmin()
+        return array[idx]
 
     def _get_labels(self):
 
-        # from 5 to 75, 15 classes
+        # from 5 to 75, 15 classes in case of l_step 5
         self.labels = list()
         for i in range(5, 80, self.l_step):
             self.labels.append(f'{i:02}')
 
+        self.labels = sorted(self.labels)
+        self.int_labels = sorted([ int(x) for x in self.labels ])
+
         print(f'labels: {self.labels}')
+        print(f'int_labels: {self.int_labels}')
 
     def __getitem__(self, index):
         fname = self.meta[index]
