@@ -772,7 +772,7 @@ def main():
     args = parse_args()
     args = check_args(args)
 
-    if args.dataset == 'gam' and args.k_fold is not None:
+    if args.dataset == 'gam' and args.k_fold is not None and args.i_fold is None:
         run_name = args.run_name
         load_path = args.load_path
         for i in range(args.k_fold):
