@@ -58,7 +58,17 @@ class GamDataset(torch.utils.data.Dataset):
         random.shuffle(gids)
         print(gids)
 
+        # test set
+        test_set_index = int(len(gids) * t_ratio)
+        test_set = gids[0:test_set_index] 
+        gids = gids[test:set_index]
 
+        train_set = gids
+        val_set = list() 
+
+        print(test_set)
+        print(train_set)
+        print(val_set)
 
         if mode == 'train':
             self.meta = glob(f'{root}/*/*.wav')
