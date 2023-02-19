@@ -45,7 +45,6 @@ class GamDataset(torch.utils.data.Dataset):
         # seperate gam_id in train, val, test
 
         dataset = glob(f'{root}/*/*.wav')
-        print(dataset)
 
         # get set of gam_id
         gids = set()
@@ -71,8 +70,10 @@ class GamDataset(torch.utils.data.Dataset):
 
         self.meta = sorted(self.meta)
 
+        '''
         for x in self.meta:
             print(x)
+        '''
         print(len(self.meta))
 
     def _get_labels(self):
