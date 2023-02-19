@@ -45,6 +45,7 @@ class GamDataset(torch.utils.data.Dataset):
         # seperate gam_id in train, val, test
 
         dataset = glob(f'{root}/*/*.wav')
+        print(dataset)
 
         # get set of gam_id
         gids = set()
