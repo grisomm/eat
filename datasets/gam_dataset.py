@@ -73,8 +73,8 @@ class GamDataset(torch.utils.data.Dataset):
         train_set = [ x for x in gids if x not in val_set ]
 
         print(test_set)
-        print(train_set)
         print(val_set)
+        print(train_set)
 
         if mode == 'train':
             self.meta = glob(f'{root}/*/*.wav')
