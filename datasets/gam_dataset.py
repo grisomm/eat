@@ -39,8 +39,8 @@ class GamDataset(torch.utils.data.Dataset):
         random.seed(r_seed)
         self._get_labels()
 
-        print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio}')
-        print(f'r_seed: {r_seed}, l_step: {l_step}')
+        print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
+                'r_seed: {r_seed}, l_step: {l_step}')
 
         # seperate gam_id in train, val, test
 
@@ -104,7 +104,7 @@ class GamDataset(torch.utils.data.Dataset):
         for i in range(5, 80, 5):
             self.labels.append(f'{i:02}')
 
-        print(f'labels: {self.labels}')
+        #print(f'labels: {self.labels}')
 
     def __getitem__(self, index):
         fname = self.meta[index]
