@@ -56,7 +56,7 @@ class GamDataset(torch.utils.data.Dataset):
         #print(gids)
 
         random.shuffle(gids)
-        print(gids)
+        #print(gids)
 
         # test set
         test_set_index = int(len(gids) * t_ratio)
@@ -66,17 +66,18 @@ class GamDataset(torch.utils.data.Dataset):
         # val_set
         val_set_start = int(i_fold * len(gids) / k_fold)
         val_set_end = int((i_fold + 1) * len(gids) / k_fold)
-        print(val_set_start, val_set_end)
+        #print(val_set_start, val_set_end)
         val_set = gids[val_set_start:val_set_end]
 
         # train_set
         train_set = [ x for x in gids if x not in val_set ]
 
+        '''
         print(f'test_set: {test_set}')
         print(f'val_set: {val_set}')
         print(f'train_set: {train_set}')
+        '''
 
-        mode = 'test'
         dataset_mode = { 'train': train_set, 'val': val_set, 'test': test_set }
         self.meta = list()
         for file in dataset:
@@ -86,13 +87,7 @@ class GamDataset(torch.utils.data.Dataset):
                 self.meta.append(file)
 
         self.meta = sorted(self.meta)
-        print(mode)
-        print(len(self.meta))
-        print(self.meta)
-
-        if mode == 'val':
-            for i in self.meta:
-                print(i)
+        print(f'{mode} dataset: {len(self.meta)}')
 
         # load label.csv
 
