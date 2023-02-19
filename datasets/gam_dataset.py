@@ -61,7 +61,7 @@ class GamDataset(torch.utils.data.Dataset):
         # test set
         test_set_index = int(len(gids) * t_ratio)
         test_set = gids[0:test_set_index] 
-        gids = gids[test:set_index]
+        gids = gids[test_set_index:]
 
         train_set = gids
         val_set = list() 
