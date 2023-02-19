@@ -63,6 +63,9 @@ class GamDataset(torch.utils.data.Dataset):
         test_set = gids[0:test_set_index] 
         gids = gids[test_set_index:]
 
+        # val_set
+        val_set_index = int(len(gids) / k_fold)
+        print(val_set_index)
         train_set = gids
         val_set = list() 
 
