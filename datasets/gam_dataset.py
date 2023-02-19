@@ -64,10 +64,13 @@ class GamDataset(torch.utils.data.Dataset):
         gids = gids[test_set_index:]
 
         # val_set
-        val_set_index = int(len(gids) / k_fold)
-        print(val_set_index)
-        train_set = gids
-        val_set = list() 
+        val_set_start = int(i_fold * len(gids) / k_fold)
+        val_set_end = int((i_fold + 1) * len(gids) / k_fold)
+        print(val_set_start, val_set_end)
+        val_set = gids[val_set_start:val_set_end]
+
+        # train_set
+        train_set = [ x for x in gids if x not in val_set ]
 
         print(test_set)
         print(train_set)
