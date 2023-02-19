@@ -81,7 +81,7 @@ class GamDataset(torch.utils.data.Dataset):
         for i in range(5, 80, 5):
             self.labels.append(f'{i:02}')
 
-        print(f'labels: {folders}')
+        print(f'labels: {self.labels}')
 
     def __getitem__(self, index):
         fname = self.meta[index]
