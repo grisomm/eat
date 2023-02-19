@@ -107,7 +107,8 @@ class GamDataset(torch.utils.data.Dataset):
 
     def _find_nearest(self, value):
         idx = (np.abs(self.float_labels - value)).argmin()
-        return self.labels[idx]
+        #return self.labels[idx]
+        return idx
 
 
     def _get_labels(self):
