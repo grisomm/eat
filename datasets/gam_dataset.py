@@ -95,13 +95,13 @@ class GamDataset(torch.utils.data.Dataset):
         assert len(csv_path) == 1, 'one csv_path should exits'
         csv_path = csv_path[0]
 
-        label_dict = dict()
+        self.label_dict = dict()
         with open(csv_path) as f:
             lines = f.readlines()
             lines = lines[1:]
             for line in lines:
                 field = line.split(',')
-                label_dict[field[0]] = self._find_nearest(float(field[2]))
+                self.label_dict[field[0]] = self._find_nearest(float(field[2]))
                 print(field[0], field[2], label_dict[field[0]])
 
 
@@ -124,14 +124,14 @@ class GamDataset(torch.utils.data.Dataset):
         print(f'float_labels: {self.float_labels}')
 
     def __getitem__(self, index):
-        fname = self.meta[index]
-        if self.mode == 'test_file':
-            label_name = 'test' 
-        else:
-            label_name = fname.split('/')[-2]
 
-        label = self.labels.index(label_name)
+        fname = self.meta[index]
+        field = Path(fname).stem.split('_')
+        gid = int(field[0])
+        pid = int(field[1])
+        label = self.label_dict[f'{gid:02}-{pid:02}']
         
+        print(fname, label)
 
         #audio, sampling_rate = torchaudio.load(fname)
         audio, sampling_rate = librosa.load(fname, sr=None)
