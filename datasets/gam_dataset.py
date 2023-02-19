@@ -86,25 +86,24 @@ class GamDataset(torch.utils.data.Dataset):
             if gid in dataset_mode[mode]:
                 self.meta.append(file)
 
+
         self.meta = sorted(self.meta)
         print(f'{mode} dataset: {len(self.meta)}')
 
         # load label.csv
+        csv_path = glob(f'{root}/*/label.csv')
+        assert len(csv_path) == 1, 'one csv_path should exits'
 
 
-        '''
-        for x in self.meta:
-            print(x)
-        '''
 
     def _get_labels(self):
 
         # from 5 to 75, 15 classes
         self.labels = list()
-        for i in range(5, 80, 5):
+        for i in range(5, 80, self.l_step):
             self.labels.append(f'{i:02}')
 
-        #print(f'labels: {self.labels}')
+        print(f'labels: {self.labels}')
 
     def __getitem__(self, index):
         fname = self.meta[index]
