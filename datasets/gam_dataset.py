@@ -102,7 +102,7 @@ class GamDataset(torch.utils.data.Dataset):
             for line in lines:
                 field = line.split(',')
                 self.label_dict[field[0]] = self._find_nearest(float(field[2]))
-                print(field[0], field[2], label_dict[field[0]])
+                print(field[0], field[2], self.label_dict[field[0]])
 
 
     def _find_nearest(self, value):
