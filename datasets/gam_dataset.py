@@ -40,7 +40,7 @@ class GamDataset(torch.utils.data.Dataset):
         self._get_labels()
 
         print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
-                'r_seed: {r_seed}, l_step: {l_step}')
+                f'r_seed: {r_seed}, l_step: {l_step}')
 
         # seperate gam_id in train, val, test
 
