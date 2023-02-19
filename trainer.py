@@ -775,8 +775,7 @@ def main():
     if args.dataset == 'gam' and args.k_fold is not None:
         for i in range(args.k_fold):
             args.i_fold = i
-            print(i)
-            #train(args)
+            train(args)
     else:
         train(args)
 
