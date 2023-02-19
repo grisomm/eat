@@ -89,6 +89,10 @@ class GamDataset(torch.utils.data.Dataset):
         print(len(self.meta))
         print(self.meta)
 
+        if mode == 'val':
+            for i in self.meta:
+                print(i)
+
         # load label.csv
 
 
