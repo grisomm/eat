@@ -93,12 +93,23 @@ class GamDataset(torch.utils.data.Dataset):
         # load label.csv
         csv_path = glob(f'{root}/*/label.csv')
         assert len(csv_path) == 1, 'one csv_path should exits'
+        csv_path = csv_path[0]
+
+        label_dict = dict()
+        with open(csv_path) as f:
+            lines = f.readlines()
+            lines = lines[1:]
+            for line in lines:
+                field = line.split('_')
+                label_dict[field[0]] = find_nearest(float(field[2]))
+                print(field[0], field[2], label_dict[field[0]])
+                
 
 
-    def find_nearest(array, value):
-        array = np.asarray(array)
-        idx = (np.abs(array - value)).argmin()
-        return array[idx]
+
+    def find_nearest(value):
+        idx = (np.abs(self.float_labels - value)).argmin()
+        return self.labels[idx]
 
     def _get_labels(self):
 
@@ -108,10 +119,10 @@ class GamDataset(torch.utils.data.Dataset):
             self.labels.append(f'{i:02}')
 
         self.labels = sorted(self.labels)
-        self.int_labels = sorted([ int(x) for x in self.labels ])
+        self.float_labels = np.asarray(sorted([ float(x) for x in self.labels ]))
 
         print(f'labels: {self.labels}')
-        print(f'int_labels: {self.int_labels}')
+        print(f'float_labels: {self.float_labels}')
 
     def __getitem__(self, index):
         fname = self.meta[index]
