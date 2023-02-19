@@ -53,7 +53,7 @@ class GamDataset(torch.utils.data.Dataset):
             gid = field[0]
             gids.add(gid)
         gids = sorted(gids)
-        print(gids)
+        #print(gids)
 
         random.shuffle(gids)
         print(gids)
