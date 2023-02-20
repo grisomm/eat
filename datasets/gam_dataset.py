@@ -113,10 +113,10 @@ class GamDataset(torch.utils.data.Dataset):
 
         # from 5 to 75, 15 classes in case of l_step 5
         self.labels = list()
-        #for i in range(5, 80, self.l_step):
-        #    self.labels.append(f'{i:02}')
-        self.labels.append(f'{self.l_step:02}')
-        self.labels.append(f'{self.l_step+10:02}')
+        for i in range(5, 80, self.l_step):
+            self.labels.append(f'{i:02}')
+        #self.labels.append(f'{self.l_step:02}')
+        #self.labels.append(f'{self.l_step+10:02}')
 
         self.labels = sorted(self.labels)
         self.float_labels = np.asarray(sorted([ float(x) for x in self.labels ]))
