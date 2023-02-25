@@ -73,10 +73,10 @@ class GamDataset(torch.utils.data.Dataset):
             #print(field[0], field[2], self.label_dict[field[0]])
 
         gam_ids = sorted(gam_ids)
-        print(gam_ids)
+        #print(gam_ids)
 
         random.shuffle(gam_ids)
-        print(gam_ids)
+        #print(gam_ids)
 
         # test set
         test_set_index = int(len(gam_ids) * t_ratio)
@@ -92,9 +92,9 @@ class GamDataset(torch.utils.data.Dataset):
         # train_set
         train_set = [ x for x in gam_ids if x not in val_set ]
 
-        print(f'test_set: {test_set}')
-        print(f'val_set: {val_set}')
-        print(f'train_set: {train_set}')
+        #print(f'test_set: {test_set}')
+        #print(f'val_set: {val_set}')
+        #print(f'train_set: {train_set}')
 
         dataset = glob(f'{root}/*/*.wav')
         dataset_mode = { 'train': train_set, 'val': val_set, 'test': test_set }
@@ -141,7 +141,7 @@ class GamDataset(torch.utils.data.Dataset):
         pid = int(field[1])
         label = self.label_dict[f'{gid:03}-{pid:03}']
         
-        #print(fname, self.labels[label])
+        print(fname, self.labels[label])
 
         #audio, sampling_rate = torchaudio.load(fname)
         audio, sampling_rate = librosa.load(fname, sr=None)
