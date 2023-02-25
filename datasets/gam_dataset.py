@@ -109,6 +109,7 @@ class GamDataset(torch.utils.data.Dataset):
 
         self.meta = sorted(self.meta)
         print(f'{mode} dataset: {len(self.meta)}')
+        print(f'gam_part list: {label_json.keys()}')
 
 
 
