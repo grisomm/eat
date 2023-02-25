@@ -53,11 +53,12 @@ class GamDataset(torch.utils.data.Dataset):
         label_path = label_path[0]
 
         with open(label_path) as f:
-            label_json = json.load(f)
+            source_label_json = json.load(f)
 
-        for gid in label_json:
-            if label_json[gid]['dif'] > dif:
-                del label_json[gid]
+        label_json = dict()
+        for gid in source_label_json:
+            if source_label_json[gid]['dif'] <= dif:
+                label_json[gid] = source_label_json[gid]
 
         # get set of gam_id
         # and label dictionary for each gid
