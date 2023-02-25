@@ -45,8 +45,8 @@ class GamDataset(torch.utils.data.Dataset):
         random.seed(r_seed)
         self._get_labels()
 
-        print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
-                f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}, ran: {ran}')
+        #print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
+        #        f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}, ran: {ran}')
 
         # seperate gam_id in train, val, test
 
