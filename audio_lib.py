@@ -111,7 +111,8 @@ def crop(wave, sample_rate, limit=1000000):
         if w > low_sound:
             duration = int(sample_rate*crop_duration) 
             segment = wave[i:i+int(duration/2)]     # use half of duration ex) 0.25 sec
-            segments.append(segment)
+            start_time = int(i/sample_rate)
+            segments.append((segment, start_time))
             i += duration
         else:
             i += 1

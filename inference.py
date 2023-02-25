@@ -25,6 +25,7 @@ def parse_args():
     parser.add_argument('--t_ratio', default=None, type=float)
     parser.add_argument('--r_seed', default=None, type=int)
     parser.add_argument('--l_step', default=None, type=int)
+    parser.add_argument('--dif', default=10, type=int)
 
     args = parser.parse_args()
     return args
@@ -41,6 +42,7 @@ def run(args, from_file=True):
     t_ratio = args.t_ratio
     r_seed = args.r_seed
     l_step = args.l_step
+    dif = args.dif
 
     #args = parse_args()
     #f_res = args.f_res
@@ -72,6 +74,7 @@ def run(args, from_file=True):
     args['t_ratio'] = t_ratio
     args['r_seed'] = r_seed
     args['l_step'] = l_step
+    args['dif'] = dif 
 
     #args['add_noise'] = add_noise
     args['add_noise'] = None 
@@ -199,6 +202,7 @@ def run(args, from_file=True):
             r_seed = args['r_seed'],
             t_ratio = args['t_ratio'],
             l_step = args['l_step'],
+            dif = args['dif'],
             segment_length=args['seq_len'],
             sampling_rate=args['sampling_rate'],
             transforms=None,

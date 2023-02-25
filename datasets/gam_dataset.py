@@ -19,6 +19,7 @@ class GamDataset(torch.utils.data.Dataset):
                  r_seed,
                  t_ratio,
                  l_step,
+                 dif,
                  segment_length,
                  sampling_rate,
                  transforms=None,
@@ -36,71 +37,78 @@ class GamDataset(torch.utils.data.Dataset):
         self.r_seed = r_seed
         self.t_ratio = t_ratio
         self.l_step = l_step
+        self.dif = dif
 
         random.seed(r_seed)
         self._get_labels()
 
         print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
-                f'r_seed: {r_seed}, l_step: {l_step}')
+                f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}')
 
         # seperate gam_id in train, val, test
 
-        dataset = glob(f'{root}/*/*.wav')
+        label_path = glob(f'{root}/*/label.json')
+        assert len(label_path) == 1, 'one label json should exits'
+        label_path = label_path[0]
+
+        with open(label_path) as f:
+            label_json = json.load(f)
+
+        for gid in label_json:
+            if label_json[gid]['dif'] > dif:
+                del label_json[gid]
 
         # get set of gam_id
-        gids = set()
-        for file in dataset:
-            field = Path(file).stem.split('_')
-            gid = field[0]
-            gids.add(gid)
-        gids = sorted(gids)
-        print(gids)
+        # and label dictionary for each gid
+        gam_ids = set()
+        self.label_dict = dict()
+        for gid in label_json: 
+            field = gid.split('-')
+            gam_id = field[0]
+            gam_ids.add(gam_id)
 
-        random.shuffle(gids)
-        print(gids)
+            ave = label_json[gid]['ave']
+            self.label_dict[gid] = self._find_nearest(float(ave))
+            #print(field[0], field[2], self.label_dict[field[0]])
+
+        gam_ids = sorted(gam_ids)
+        print(gam_ids)
+
+        random.shuffle(gam_ids)
+        print(gam_ids)
 
         # test set
-        test_set_index = int(len(gids) * t_ratio)
-        test_set = gids[0:test_set_index] 
-        gids = gids[test_set_index:]
+        test_set_index = int(len(gam_ids) * t_ratio)
+        test_set = gam_ids[0:test_set_index] 
+        gam_ids = gam_ids[test_set_index:]
 
         # val_set
-        val_set_start = int(i_fold * len(gids) / k_fold)
-        val_set_end = int((i_fold + 1) * len(gids) / k_fold)
+        val_set_start = int(i_fold * len(gam_ids) / k_fold)
+        val_set_end = int((i_fold + 1) * len(gam_ids) / k_fold)
         #print(val_set_start, val_set_end)
-        val_set = gids[val_set_start:val_set_end]
+        val_set = gam_ids[val_set_start:val_set_end]
 
         # train_set
-        train_set = [ x for x in gids if x not in val_set ]
+        train_set = [ x for x in gam_ids if x not in val_set ]
 
         print(f'test_set: {test_set}')
         print(f'val_set: {val_set}')
         print(f'train_set: {train_set}')
 
+        dataset = glob(f'{root}/*/*.wav')
         dataset_mode = { 'train': train_set, 'val': val_set, 'test': test_set }
         self.meta = list()
         for file in dataset:
-            field = Path(file).stem.split('_')
-            gid = field[0]
-            if gid in dataset_mode[mode]:
+            gid = Path(file).stem.split('_')[0]
+            gam_id = gid.split('-')[0]
+
+            if gam_id in dataset_mode[mode] and gid in label_json:
                 self.meta.append(file)
 
         self.meta = sorted(self.meta)
         print(f'{mode} dataset: {len(self.meta)}')
 
-        # load label.csv
-        csv_path = glob(f'{root}/*/label.csv')
-        assert len(csv_path) == 1, 'one csv_path should exits'
-        csv_path = csv_path[0]
 
-        self.label_dict = dict()
-        with open(csv_path) as f:
-            lines = f.readlines()
-            lines = lines[1:]
-            for line in lines:
-                field = line.split(',')
-                self.label_dict[field[0]] = self._find_nearest(float(field[2]))
-                #print(field[0], field[2], self.label_dict[field[0]])
 
 
     def _find_nearest(self, value):
