@@ -74,7 +74,7 @@ class GamDataset(torch.utils.data.Dataset):
             #print(field[0], field[2], self.label_dict[field[0]])
 
         gam_ids = sorted(gam_ids)
-        #print(gam_ids)
+        print(gam_ids)
 
         random.shuffle(gam_ids)
         #print(gam_ids)
