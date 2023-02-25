@@ -296,7 +296,7 @@ def save_model(net, opt, loss, best_loss, acc, best_acc, steps, root, lr_schedul
             chkpnt['scaler'] = scaler.state_dict()
         torch.save(chkpnt, root / "chkpnt.pt")
         torch.save(net.state_dict(), root / "best_model.pt")
-        print(best_acc, 'saved')
+        #print(best_acc, 'saved')
 
     elif acc == best_acc:
         if loss < best_loss:
@@ -312,7 +312,7 @@ def save_model(net, opt, loss, best_loss, acc, best_acc, steps, root, lr_schedul
                 chkpnt['lr_scheduler'] = lr_scheduler.state_dict()
             torch.save(chkpnt, root / "chkpnt.pt")
             torch.save(net.state_dict(), root / "best_model.pt")
-            print(best_acc, 'saved')
+            #print(best_acc, 'saved')
     return best_acc, best_loss
 
 
@@ -694,6 +694,7 @@ def train(args):
                     writer.add_scalar("train/lr", costs[-1][2], steps)
 
                 t_batch = time.time() - t_batch
+                '''
                 print("epoch {}/{} | iters {}/{} | ms/batch {:5.2f} | acc/loss {}".format(
                     epoch,
                     args.n_epochs,
@@ -702,6 +703,7 @@ def train(args):
                     1000 * t_batch / args.log_interval,
                     np.asarray(costs).mean(0))
                 )
+                '''
                 costs = []
                 start = time.time()
 
@@ -766,8 +768,8 @@ def train(args):
                     )
                 )
 
-                print("Took %5.4fs to save samples" % (time.time() - st))
-                print("-" * 100)
+                #print("Took %5.4fs to save samples" % (time.time() - st))
+                #print("-" * 100)
                 net.train()
 
         t_epoch = time.time() - t_epoch
