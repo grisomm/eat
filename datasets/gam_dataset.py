@@ -21,6 +21,7 @@ class GamDataset(torch.utils.data.Dataset):
                  t_ratio,
                  l_step,
                  dif,
+                 ran,
                  segment_length,
                  sampling_rate,
                  transforms=None,
@@ -39,12 +40,13 @@ class GamDataset(torch.utils.data.Dataset):
         self.t_ratio = t_ratio
         self.l_step = l_step
         self.dif = dif
+        self.ran = ran
 
         random.seed(r_seed)
         self._get_labels()
 
         print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
-                f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}')
+                f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}, ran: {ran}')
 
         # seperate gam_id in train, val, test
 
@@ -58,7 +60,13 @@ class GamDataset(torch.utils.data.Dataset):
         label_json = dict()
         for gid in source_label_json:
             if source_label_json[gid]['dif'] <= dif:
-                label_json[gid] = source_label_json[gid]
+                
+                # check range of gam_id
+                gam_id = int(gid.split('-')[0])
+                if ran is None:
+                    label_json[gid] = source_label_json[gid]
+                elif gam_id >= ran[0] and gam_id <= ran[1]: 
+                    label_json[gid] = source_label_json[gid]
 
         # get set of gam_id
         # and label dictionary for each gid

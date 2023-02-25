@@ -63,7 +63,8 @@ def parse_args():
     parser.add_argument('--t_ratio', default=None, type=float)
     parser.add_argument('--r_seed', default=None, type=int)
     parser.add_argument('--l_step', default=None, type=int)
-    parser.add_argument('--dif', default=10, type=int)
+    parser.add_argument('--dif', default=100, type=int)
+    parser.add_argument('--ran', nargs='+', type=int, default=None)
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -237,6 +238,7 @@ def create_dataset(args):
             t_ratio=args.t_ratio,
             l_step=args.l_step,
             dif=args.dif,
+            ran=args.ran,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=args.augs_signal + args.augs_noise,
@@ -252,6 +254,7 @@ def create_dataset(args):
             t_ratio=args.t_ratio,
             l_step=args.l_step,
             dif=args.dif,
+            ran=args.ran,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=None,
