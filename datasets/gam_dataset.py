@@ -136,10 +136,10 @@ class GamDataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
 
         fname = self.meta[index]
-        field = Path(fname).stem.split('_')
+        field = Path(fname).stem.split('_')[0].split('-')
         gid = int(field[0])
         pid = int(field[1])
-        label = self.label_dict[f'{gid:02}-{pid:02}']
+        label = self.label_dict[f'{gid:03}-{pid:03}']
         
         #print(fname, self.labels[label])
 
