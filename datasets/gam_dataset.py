@@ -141,7 +141,7 @@ class GamDataset(torch.utils.data.Dataset):
         pid = int(field[1])
         label = self.label_dict[f'{gid:03}-{pid:03}']
         
-        print(fname, self.labels[label])
+        #print(fname, self.labels[label])
 
         #audio, sampling_rate = torchaudio.load(fname)
         audio, sampling_rate = librosa.load(fname, sr=None)
