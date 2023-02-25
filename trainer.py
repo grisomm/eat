@@ -771,7 +771,7 @@ def train(args):
                 net.train()
 
         t_epoch = time.time() - t_epoch
-        print("epoch {}/{} time {:.2f}".format(epoch, args.n_epochs, t_epoch / args.log_interval))
+        #print("epoch {}/{} time {:.2f}".format(epoch, args.n_epochs, t_epoch / args.log_interval))
 
 
 def main():
