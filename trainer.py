@@ -356,18 +356,45 @@ def train(args):
     #######################
     train_set, test_set = create_dataset(args)
 
-    train_loader = DataLoader(train_set,
-                              batch_size=args.batch_size,
-                              num_workers=args.num_workers,
-                              pin_memory=True,
-                              shuffle=False if train_set is None else True,
-                              )
-    test_loader = DataLoader(test_set,
-                             batch_size=args.batch_size,
-                             num_workers=args.num_workers,
-                             pin_memory=True,
-                             shuffle=False,
-                             )
+    if args.multilabel:
+        from utils.helper_funcs import collate_fn
+        if args.use_balanced_sampler:
+            sampler = torch.utils.data.sampler.WeightedRandomSampler(train_set.samples_weight, train_set.__len__(), replacement=True)
+            train_loader = DataLoader(train_set, batch_size=args.batch_size,
+                                      num_workers=args.num_workers,
+                                      pin_memory=True,
+                                      shuffle=False,
+                                      drop_last=True,
+                                      collate_fn=collate_fn,
+                                      sampler=sampler
+                                      )
+        else:
+            train_loader = DataLoader(train_set, batch_size=args.batch_size,
+                                      num_workers=args.num_workers,
+                                      pin_memory=True,
+                                      shuffle=True,
+                                      drop_last=True,
+                                      collate_fn=collate_fn,
+                                      )
+        test_loader = DataLoader(test_set, batch_size=args.batch_size,
+                                 num_workers=args.num_workers,
+                                 pin_memory=True,
+                                 shuffle=False,
+                                 collate_fn=collate_fn,
+                                 )
+    else:
+        train_loader = DataLoader(train_set,
+                                  batch_size=args.batch_size,
+                                  num_workers=args.num_workers,
+                                  pin_memory=True,
+                                  shuffle=False if train_set is None else True,
+                                  )
+        test_loader = DataLoader(test_set,
+                                 batch_size=args.batch_size,
+                                 num_workers=args.num_workers,
+                                 pin_memory=True,
+                                 shuffle=False,
+                                 )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
