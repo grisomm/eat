@@ -570,7 +570,7 @@ def train(args):
     load_root = Path(args.load_path) if args.load_path else None
     with open(root / "args.yml", "w") as f:
         yaml.dump(args, f)
-    print(args)
+    #print(args)
     writer = SummaryWriter(str(root))
 
     #####################
@@ -806,12 +806,13 @@ def main():
             print('#####################################################')
 
             acc = train(args)
-            print(f'fold_{i}: {acc}')
-            accs.append(acc)
+            #print(f'fold_{i}: {acc}')
+            accs.append(round(acc,1))
 
-        ave = int(stat.mean(accs))
+        ave = round(stat.mean(accs),1)
         print('[results]')
-        print(accs, ave)
+        print(f'# best_accs: {accs}')
+        print(f'# aveage: {ave}')
 
     else:
         train(args)
