@@ -773,7 +773,7 @@ def train(args):
                 )
                 '''
 
-                print(f'[{epoch:03}/{args.n_epochs:03}] {acc:.2f} {best_acc:.2f}')
+                print(f'[{epoch:03}/{args.n_epochs:03}]\t{acc:.2f}\t{best_acc:.2f}')
 
                 #print("Took %5.4fs to save samples" % (time.time() - st))
                 #print("-" * 100)
