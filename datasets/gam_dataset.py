@@ -96,7 +96,7 @@ class GamDataset(torch.utils.data.Dataset):
             #print(field[0], field[2], self.label_dict[field[0]])
 
         gam_ids = sorted(gam_ids)
-        #print(gam_ids)
+        print(gam_ids)
 
         random.shuffle(gam_ids)
         #print(gam_ids)
@@ -133,6 +133,22 @@ class GamDataset(torch.utils.data.Dataset):
         print(f'{mode} dataset: {len(self.meta)}')
         #print(f'gam_part list: {label_json.keys()}')
 
+        # stat of dataset 
+        label_stat = dict()
+        for label in self.labels: 
+            label_stat[label] = 0
+
+        for fname in self.meta:
+            field = Path(fname).stem.split('_')[0].split('-')
+            gid = int(field[0])
+            pid = int(field[1])
+            index = self.label_dict[f'{gid:03}-{pid:03}']
+            label = self.labels[index]
+            label_stat[label] += 1
+
+        for key in label_stat:
+            print(f'{key}: {label_stat[key]}')
+
 
 
 
@@ -154,7 +170,7 @@ class GamDataset(torch.utils.data.Dataset):
         self.labels = sorted(self.labels)
         self.float_labels = np.asarray(sorted([ float(x) for x in self.labels ]))
 
-        #print(f'labels: {self.labels}')
+        print(f'labels: {self.labels}')
         #print(f'float_labels: {self.float_labels}')
 
     def __getitem__(self, index):
