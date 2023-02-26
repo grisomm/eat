@@ -796,24 +796,24 @@ def main():
         accs = list()
         for i in range(args.k_fold):
 
-            args.run_name = f'{run_name}_{i}_of_{args.k_fold}'
+            args.run_name = f'{run_name}_{i+1}_of_{args.k_fold}'
             args.i_fold = i
 
             print('#####################################################')
-            print(f'# train: {i}/{args.k_fold} fold')
+            print(f'# train: {i+1}/{args.k_fold} fold')
             #print(f'# run_name: {args.run_name}') 
 
             if load_path is not None:
-                args.load_path = f'{load_path}_{i}_of_{args.k_fold}'
+                args.load_path = f'{load_path}_{i+1}_of_{args.k_fold}'
                 print(f'# load checkpoint: {args.load_path}') 
 
             print('#####################################################')
 
             acc = train(args)
             #print(f'fold_{i}: {acc}')
-            accs.append(round(acc,1))
+            accs.append(round(acc,2))
 
-        ave = round(stat.mean(accs),1)
+        ave = round(stat.mean(accs),2)
         print('[results]')
         print(f'# best_accs: {accs}')
         print(f'# aveage: {ave}')
