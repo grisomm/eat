@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from utils.helper_funcs import accuracy, mAP
 from datasets.batch_augs import BatchAugs
-#import statistics as stat
+import statistics as stat
 
 
 def parse_args():
@@ -797,7 +797,7 @@ def main():
 
             print('#####################################################')
             print(f'# train: {i}/{args.k_fold} fold')
-            print(f'# run_name: {args.run_name}') 
+            #print(f'# run_name: {args.run_name}') 
 
             if load_path is not None:
                 args.load_path = f'{load_path}_{i}_of_{args.k_fold}'
