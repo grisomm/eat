@@ -609,7 +609,7 @@ def train(args):
         best_acc = -1
         best_loss = 999
         steps = 0
-    print(best_acc)
+    #print(best_acc)
 
     # enable cudnn autotuner to speed up training
     torch.backends.cudnn.benchmark = True
