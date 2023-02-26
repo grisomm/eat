@@ -355,6 +355,7 @@ def train(args):
     # Create data loaders #
     #######################
     train_set, test_set = create_dataset(args)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if args.multilabel:
         from utils.helper_funcs import collate_fn
@@ -395,7 +396,7 @@ def train(args):
                                  shuffle=False,
                                  )
 
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     ba_params = {
         'seq_len': args.seq_len,
