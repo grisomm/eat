@@ -383,6 +383,7 @@ def train(args):
                                  collate_fn=collate_fn,
                                  )
     else:
+        print('test1')
         train_loader = DataLoader(train_set,
                                   batch_size=args.batch_size,
                                   num_workers=args.num_workers,
@@ -394,10 +395,8 @@ def train(args):
                                  pin_memory=True,
                                  shuffle=False,
                                  )
-
-
-    print('test')
-    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print('test2')
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ba_params = {
         'seq_len': args.seq_len,
         'fs': args.sampling_rate,
