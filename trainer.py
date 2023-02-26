@@ -780,7 +780,7 @@ def train(args):
         t_epoch = time.time() - t_epoch
         #print("epoch {}/{} time {:.2f}".format(epoch, args.n_epochs, t_epoch / args.log_interval))
 
-    return best_acc 
+    #return best_acc 
 
 
 def main():
