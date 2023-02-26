@@ -9,6 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from utils.helper_funcs import accuracy, mAP
 from datasets.batch_augs import BatchAugs
+import statistics as stat
 
 
 def parse_args():
@@ -387,8 +388,6 @@ def train(args):
                                   num_workers=args.num_workers,
                                   pin_memory=True,
                                   shuffle=False if train_set is None else True,
-                                  drop_last=True,
-                                  )
         test_loader = DataLoader(test_set,
                                  batch_size=args.batch_size,
                                  num_workers=args.num_workers,
@@ -781,6 +780,8 @@ def train(args):
         t_epoch = time.time() - t_epoch
         #print("epoch {}/{} time {:.2f}".format(epoch, args.n_epochs, t_epoch / args.log_interval))
 
+    return best_acc 
+
 
 def main():
     args = parse_args()
@@ -789,6 +790,8 @@ def main():
     if args.dataset == 'gam' and args.k_fold is not None and args.i_fold is None:
         run_name = args.run_name
         load_path = args.load_path
+
+        accs = list()
         for i in range(args.k_fold):
 
             args.run_name = f'{run_name}_{i}_of_{args.k_fold}'
@@ -804,9 +807,18 @@ def main():
 
             print('#####################################################')
 
-            train(args)
+            acc = train(args)
+            print(f'fold_{i}: {acc}')
+            accs.append(acc)
+
+        ave = int(stat.mean(accs))
+        print('[results]')
+        print(accs, ave)
+
     else:
         train(args)
+    
+
 
 if __name__ == "__main__":
     main()
