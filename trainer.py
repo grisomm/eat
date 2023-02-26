@@ -396,7 +396,14 @@ def train(args):
                                  shuffle=False,
                                  )
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+
+
+
+
+
+
+
 
     ba_params = {
         'seq_len': args.seq_len,
