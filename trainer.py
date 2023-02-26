@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from utils.helper_funcs import accuracy, mAP
 from datasets.batch_augs import BatchAugs
-import statistics as stat
+#import statistics as stat
 
 
 def parse_args():
@@ -64,10 +64,10 @@ def parse_args():
     parser.add_argument('--t_ratio', default=0.0, type=float)
     parser.add_argument('--r_seed', default=1234, type=int)
     parser.add_argument('--l_step', default=None, type=int)
-    parser.add_argument('--l_start', default=5, type=int)
+    #parser.add_argument('--l_start', default=5, type=int)
     parser.add_argument('--dif', default=10000, type=int)
-    parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
-    parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
+    #parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
+    #parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -355,7 +355,6 @@ def train(args):
     # Create data loaders #
     #######################
     train_set, test_set = create_dataset(args)
-    print('test1')
 
     if args.multilabel:
         from utils.helper_funcs import collate_fn
@@ -395,8 +394,9 @@ def train(args):
                                  pin_memory=True,
                                  shuffle=False,
                                  )
-    print('test2')
+
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     ba_params = {
         'seq_len': args.seq_len,
         'fs': args.sampling_rate,
