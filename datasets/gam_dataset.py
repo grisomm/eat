@@ -171,7 +171,7 @@ class GamDataset(torch.utils.data.Dataset):
         self.labels = sorted(self.labels)
         self.float_labels = np.asarray(sorted([ float(x) for x in self.labels ]))
 
-        print(f'labels: {self.labels}')
+        #print(f'labels: {self.labels}')
         #print(f'float_labels: {self.float_labels}')
 
     def __getitem__(self, index):
