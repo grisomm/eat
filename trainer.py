@@ -355,6 +355,7 @@ def train(args):
     # Create data loaders #
     #######################
     train_set, test_set = create_dataset(args)
+    print('test1')
 
     if args.multilabel:
         from utils.helper_funcs import collate_fn
@@ -383,7 +384,6 @@ def train(args):
                                  collate_fn=collate_fn,
                                  )
     else:
-        print('test1')
         train_loader = DataLoader(train_set,
                                   batch_size=args.batch_size,
                                   num_workers=args.num_workers,
