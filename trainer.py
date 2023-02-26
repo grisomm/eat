@@ -395,11 +395,9 @@ def train(args):
                                  shuffle=False,
                                  )
 
-    #####################
-    # Network           #
-    #####################
-    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+    print('test')
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     ba_params = {
         'seq_len': args.seq_len,
         'fs': args.sampling_rate,
