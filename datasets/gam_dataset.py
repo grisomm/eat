@@ -130,8 +130,6 @@ class GamDataset(torch.utils.data.Dataset):
                 self.meta.append(file)
 
         self.meta = sorted(self.meta)
-        print(f'{mode} dataset: {len(self.meta)}')
-        #print(f'gam_part list: {label_json.keys()}')
 
         # stat of dataset 
         label_stat = dict()
@@ -146,7 +144,8 @@ class GamDataset(torch.utils.data.Dataset):
             label = self.labels[index]
             label_stat[label] += 1
 
-        print(label_stat)
+        print(f'{mode} dataset: {len(self.meta)} - {label_stat}')
+        #print(f'gam_part list: {label_json.keys()}')
         #for key in label_stat:
         #    print(f'{key}: {label_stat[key]}')
 
