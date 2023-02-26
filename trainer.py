@@ -614,7 +614,7 @@ def train(args):
     # enable cudnn autotuner to speed up training
     torch.backends.cudnn.benchmark = True
 
-    dummy_run(net, args.batch_size, args.seq_len)
+    #dummy_run(net, args.batch_size, args.seq_len)
     costs = []
     net.train()
     start = time.time()
