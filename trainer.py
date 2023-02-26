@@ -64,10 +64,10 @@ def parse_args():
     parser.add_argument('--t_ratio', default=0.0, type=float)
     parser.add_argument('--r_seed', default=1234, type=int)
     parser.add_argument('--l_step', default=None, type=int)
-    #parser.add_argument('--l_start', default=5, type=int)
+    parser.add_argument('--l_start', default=5, type=int)
     parser.add_argument('--dif', default=10000, type=int)
-    #parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
-    #parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
+    parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
+    parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -395,7 +395,7 @@ def train(args):
                                  shuffle=False,
                                  )
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     ba_params = {
         'seq_len': args.seq_len,
