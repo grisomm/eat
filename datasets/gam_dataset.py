@@ -96,7 +96,7 @@ class GamDataset(torch.utils.data.Dataset):
             #print(field[0], field[2], self.label_dict[field[0]])
 
         gam_ids = sorted(gam_ids)
-        print(gam_ids)
+        #print(gam_ids)
 
         random.shuffle(gam_ids)
         #print(gam_ids)
@@ -146,8 +146,9 @@ class GamDataset(torch.utils.data.Dataset):
             label = self.labels[index]
             label_stat[label] += 1
 
-        for key in label_stat:
-            print(f'{key}: {label_stat[key]}')
+        print(label_stat)
+        #for key in label_stat:
+        #    print(f'{key}: {label_stat[key]}')
 
 
 
