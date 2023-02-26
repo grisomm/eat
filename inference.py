@@ -25,8 +25,10 @@ def parse_args():
     parser.add_argument('--t_ratio', default=None, type=float)
     parser.add_argument('--r_seed', default=None, type=int)
     parser.add_argument('--l_step', default=None, type=int)
-    parser.add_argument('--dif', default=100, type=int)
-    parser.add_argument('--ran', nargs='+', type=int, default=None)
+    parser.add_argument('--l_start', default=5, type=int)
+    parser.add_argument('--dif', default=10000, type=int)
+    parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
+    parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
 
     args = parser.parse_args()
     return args
@@ -43,8 +45,10 @@ def run(args, from_file=True):
     t_ratio = args.t_ratio
     r_seed = args.r_seed
     l_step = args.l_step
+    l_start = args.l_start
     dif = args.dif
-    ran = args.ran
+    gam_id_range = args.gam_id_range
+    value_range = args.value_range
 
     #args = parse_args()
     #f_res = args.f_res
@@ -76,8 +80,10 @@ def run(args, from_file=True):
     args['t_ratio'] = t_ratio
     args['r_seed'] = r_seed
     args['l_step'] = l_step
+    args['l_start'] = l_start
     args['dif'] = dif 
-    args['ran'] = ran 
+    args['gam_id_range'] = gam_id_range
+    args['value_range'] = value_range
 
     #args['add_noise'] = add_noise
     args['add_noise'] = None 
@@ -205,8 +211,10 @@ def run(args, from_file=True):
             r_seed = args['r_seed'],
             t_ratio = args['t_ratio'],
             l_step = args['l_step'],
+            l_start = args['l_start'],
             dif = args['dif'],
-            ran = args['ran'],
+            gam_id_range = args['gam_id_range'],
+            value_range = args['value_range'],
             segment_length=args['seq_len'],
             sampling_rate=args['sampling_rate'],
             transforms=None,

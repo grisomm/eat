@@ -20,8 +20,10 @@ class GamDataset(torch.utils.data.Dataset):
                  r_seed,
                  t_ratio,
                  l_step,
+                 l_start,
                  dif,
-                 ran,
+                 gam_id_range,
+                 value_range,
                  segment_length,
                  sampling_rate,
                  transforms=None,
@@ -39,14 +41,16 @@ class GamDataset(torch.utils.data.Dataset):
         self.r_seed = r_seed
         self.t_ratio = t_ratio
         self.l_step = l_step
+        self.l_start = l_start
         self.dif = dif
-        self.ran = ran
+        self.gam_id_range = gam_id_range
+        self.value_range = value_range
 
         random.seed(r_seed)
         self._get_labels()
 
         #print(f'k_fold: {k_fold}, i_fold: {i_fold}, t_ratio: {t_ratio} '\
-        #        f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}, ran: {ran}')
+        #        f'r_seed: {r_seed}, l_step: {l_step}, dif: {dif}')
 
         # seperate gam_id in train, val, test
 
@@ -59,14 +63,24 @@ class GamDataset(torch.utils.data.Dataset):
 
         label_json = dict()
         for gid in source_label_json:
-            if source_label_json[gid]['dif'] <= dif:
+
+            # filter by
+
+            # 1. dif - quality of data
+            if source_label_json[gid]['dif'] > dif:
+                continue
                 
-                # check range of gam_id
-                gam_id = int(gid.split('-')[0])
-                if ran is None:
-                    label_json[gid] = source_label_json[gid]
-                elif gam_id >= ran[0] and gam_id <= ran[1]: 
-                    label_json[gid] = source_label_json[gid]
+            # 2. value range
+            ave = source_label_json[gid]['ave']
+            if ave < value_range[0] or ave > value_range[1]:
+                continue
+
+            # 3. gam_id range
+            gam_id = int(gid.split('-')[0])
+            if gam_id < gam_id_range[0] or gam_id > gam_id_range[1]: 
+                continue
+
+            label_json[gid] = source_label_json[gid]
 
         # get set of gam_id
         # and label dictionary for each gid

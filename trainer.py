@@ -60,11 +60,13 @@ def parse_args():
     parser.add_argument('--labels', nargs='+', type=str, default=None)
     parser.add_argument('--k_fold', default=None, type=int)
     parser.add_argument('--i_fold', default=None, type=int)
-    parser.add_argument('--t_ratio', default=None, type=float)
-    parser.add_argument('--r_seed', default=None, type=int)
+    parser.add_argument('--t_ratio', default=0.0, type=float)
+    parser.add_argument('--r_seed', default=1234, type=int)
     parser.add_argument('--l_step', default=None, type=int)
-    parser.add_argument('--dif', default=100, type=int)
-    parser.add_argument('--ran', nargs='+', type=int, default=None)
+    parser.add_argument('--l_start', default=5, type=int)
+    parser.add_argument('--dif', default=10000, type=int)
+    parser.add_argument('--gam_id_range', nargs='+', type=int, default=[0,100000])
+    parser.add_argument('--value_range', nargs='+', type=int, default=[0,100000])
     '''net'''
     parser.add_argument('--ds_factors', nargs='+', type=int, default=[4, 4, 4, 4])
     parser.add_argument('--n_head', default=8, type=int)
@@ -237,8 +239,10 @@ def create_dataset(args):
             r_seed=args.r_seed,
             t_ratio=args.t_ratio,
             l_step=args.l_step,
+            l_start=args.l_start,
             dif=args.dif,
-            ran=args.ran,
+            gam_id_range=args.gam_id_range,
+            value_range=args.value_range,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=args.augs_signal + args.augs_noise,
@@ -253,8 +257,10 @@ def create_dataset(args):
             r_seed=args.r_seed,
             t_ratio=args.t_ratio,
             l_step=args.l_step,
+            l_start=args.l_start,
             dif=args.dif,
-            ran=args.ran,
+            gam_id_range=args.gam_id_range,
+            value_range=args.value_range,
             segment_length=args.seq_len,
             sampling_rate=args.sampling_rate,
             transforms=None,
