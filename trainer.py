@@ -398,7 +398,7 @@ def train(args):
     #####################
     # Network           #
     #####################
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     ba_params = {
         'seq_len': args.seq_len,
@@ -780,7 +780,7 @@ def train(args):
         t_epoch = time.time() - t_epoch
         #print("epoch {}/{} time {:.2f}".format(epoch, args.n_epochs, t_epoch / args.log_interval))
 
-    #return best_acc 
+    return best_acc 
 
 
 def main():
