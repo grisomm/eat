@@ -758,6 +758,7 @@ def train(args):
 
                 best_acc, best_loss = save_model(net, opt, loss, best_loss, acc, best_acc, steps, root, lr_scheduler=lr_scheduler, scaler=scaler)
 
+                '''
                 print(
                     "test: Epoch {} | Iters {} / {} | ms/batch {:5.2f} | acc/best acc/loss {:.2f} {:.2f} {:.2f} {:.2f}".format(
                         epoch,
@@ -770,6 +771,9 @@ def train(args):
                         best_loss,
                     )
                 )
+                '''
+
+                print(f'[{epoch:03}/{args.n_epochs:03}] {acc:.2f} {best_acc:.2f}')
 
                 #print("Took %5.4fs to save samples" % (time.time() - st))
                 #print("-" * 100)
